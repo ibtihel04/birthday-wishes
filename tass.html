@@ -1,0 +1,25 @@
+
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عيد ميلاد سعيد، أختي!</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>عيد ميلاد سعيد، أختي الغالية!</h1>
+        <p>نتمنى لك أسعد الأوقات وأحلى يوم في حياتك! 🎉💖</p>
+        <button onclick="showMessage()">مفاجأة!</button>
+        <div id="message" class="hidden">
+            <p>إنتي أحلى أخت في الدنيا! إن شاء الله ديما بخير وناجحة! 🥳</p>
+            <img src="tas.jpeg" alt="صورة عيد ميلاد">
+        </div>
+    </div>
+    <script>
+        function showMessage() {
+            document.getElementById('message').classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
