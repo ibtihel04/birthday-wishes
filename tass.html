@@ -1,25 +1,128 @@
-
-<html lang="ar">
+<!doctype html>
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>عيد ميلاد سعيد، أختي!</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>عيد ميلاد سعيد 🎂</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Pacifico&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <div class="container">
-        <h1>عيد ميلاد سعيد، أختي الغالية!</h1>
-        <p>نتمنى لك أسعد الأوقات وأحلى يوم في حياتك! 🎉💖</p>
-        <button onclick="showMessage()">مفاجأة!</button>
-        <div id="message" class="hidden">
-            <p>إنتي أحلى أخت في الدنيا! إن شاء الله ديما بخير وناجحة! 🥳</p>
-            <img src="tas.jpeg" alt="صورة عيد ميلاد">
-        </div>
+  <main class="hero">
+    <div class="card" role="region" aria-labelledby="greeting-title">
+      <header class="card__header">
+        <img src="tas.jpeg" alt="كاب كيك احتفالي" class="brand" />
+        <h1 id="greeting-title" class="title">عيد ميلاد سعيد يا أختي الغالية! 🎉</h1>
+        <p class="subtitle">أتمناكِ سنة كلها فرح، صحة ونجاحات 💖</p>
+      </header>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="surpriseBtn" aria-controls="message" aria-expanded="false">شوف المفاجأة ✨</button>
+        <button class="btn btn-ghost" id="toggleTheme" aria-label="تبديل السمة">تبديل النمط</button>
+      </div>
+
+      <section id="message" class="reveal" hidden>
+        <p class="message-text">إنتِ أحلى أخت في الدنيا، ربي يحفظك ويهنّيك! 🥳🌸</p>
+      </section>
+
+      <footer class="card__footer">
+        <small>مع كل الحب 💕</small>
+      </footer>
     </div>
-    <script>
-        function showMessage() {
-            document.getElementById('message').classList.toggle('hidden');
+    <canvas id="confetti" aria-hidden="true"></canvas>
+  </main>
+
+  <script>
+    const surpriseBtn = document.getElementById('surpriseBtn');
+    const message = document.getElementById('message');
+    const confettiCanvas = document.getElementById('confetti');
+    const toggleThemeBtn = document.getElementById('toggleTheme');
+
+    function toggleMessage() {
+      const willShow = message.hasAttribute('hidden');
+      if (willShow) {
+        message.removeAttribute('hidden');
+        document.body.classList.add('celebrating');
+      } else {
+        message.setAttribute('hidden', '');
+        document.body.classList.remove('celebrating');
+      }
+      surpriseBtn.setAttribute('aria-expanded', String(willShow));
+    }
+
+    surpriseBtn.addEventListener('click', () => {
+      toggleMessage();
+      if (document.body.classList.contains('celebrating')) {
+        startConfetti();
+        setTimeout(stopConfetti, 2500);
+      }
+    });
+
+    toggleThemeBtn.addEventListener('click', () => {
+      document.documentElement.classList.toggle('theme-dark');
+    });
+
+    // Lightweight confetti
+    const ctx = confettiCanvas.getContext('2d');
+    let confettiPieces = [];
+    let animationFrame;
+
+    function resizeCanvas() {
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function makePiece() {
+      const colors = getComputedStyle(document.documentElement)
+        .getPropertyValue('--confetti-colors')
+        .split(',')
+        .map(c => c.trim());
+      return {
+        x: Math.random() * confettiCanvas.width,
+        y: -10,
+        w: 8 + Math.random() * 8,
+        h: 6 + Math.random() * 6,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        speed: 2 + Math.random() * 3,
+        rotation: Math.random() * Math.PI,
+        rotationSpeed: (Math.random() - 0.5) * 0.2
+      };
+    }
+
+    function startConfetti() {
+      confettiPieces = new Array(120).fill(0).map(makePiece);
+      cancelAnimationFrame(animationFrame);
+      animate();
+    }
+
+    function stopConfetti() {
+      confettiPieces = [];
+      cancelAnimationFrame(animationFrame);
+      ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+      confettiPieces.forEach(p => {
+        p.y += p.speed;
+        p.rotation += p.rotationSpeed;
+        if (p.y > confettiCanvas.height + 10) {
+          p.y = -10;
+          p.x = Math.random() * confettiCanvas.width;
         }
-    </script>
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+        ctx.restore();
+      });
+      animationFrame = requestAnimationFrame(animate);
+    }
+  </script>
 </body>
 </html>
