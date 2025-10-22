@@ -1,66 +1,85 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+:root{
+  --bg: #fff8fb;
+  --card: #ffffffee;
+  --text: #432534;
+  --muted: #6e5663;
+  --primary: #e6508a; /* rosy pink */
+  --primary-strong:#c53e74;
+  --accent: #ffd166; /* warm yellow */
+  --ring: #fbb6ce;
+  --shadow: 0 10px 30px rgba(229,80,138,.25);
+  --confetti-colors: #e6508a, #ffd166, #84dcc6, #95a6ff, #ff9aa2;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-image: url('https://example.com/background.jpg'); /* Hintergrundbild hinzufügen */
-    background-size: cover;
-    background-position: center;
-    direction: rtl; /* Textausrichtung auf Arabisch */
+:root.theme-dark{
+  --bg: #151217;
+  --card: #1f1a22ee;
+  --text: #f3eaf1;
+  --muted: #cdbdca;
+  --primary: #ff6fa7;
+  --primary-strong:#ff4f92;
+  --accent: #ffcd70;
+  --ring: #7a3557;
+  --shadow: 0 10px 30px rgba(0,0,0,.45);
 }
 
-.container {
-    text-align: center;
-    background: rgba(255, 255, 255, 0.9); /* Halbtransparenter Hintergrund */
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: "Cairo", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans Arabic", sans-serif;
+  color:var(--text);
+  background: radial-gradient(1200px 1200px at 10% -10%, #ffe1ec, transparent 60%),
+              radial-gradient(1000px 1000px at 110% 10%, #fff3d8, transparent 50%),
+              var(--bg);
+  display:grid;
+  place-items:center;
 }
 
-h1 {
-    color: #ff69b4;
-    font-size: 2.5em;
+.hero{position:relative;width:min(960px, 92vw);padding:24px}
+.brand{width:84px;height:84px;border-radius:50%;object-fit:cover;box-shadow:0 6px 18px rgba(0,0,0,.12);}
+
+.card{
+  background:var(--card);
+  backdrop-filter:saturate(1.2) blur(6px);
+  border-radius:20px;
+  box-shadow:var(--shadow);
+  padding:28px 28px 20px;
+  border:1px solid rgba(0,0,0,.06);
 }
 
-p {
-    font-size: 1.2em;
-    color: #333;
-}
+.card__header{display:grid;justify-items:center;gap:12px;margin-bottom:16px}
+.title{font-family:"Pacifico", cursive; font-weight:800; letter-spacing:.3px; font-size:clamp(28px, 5vw, 44px); margin:6px 0 0; color:var(--primary)}
+.subtitle{font-size:clamp(15px, 2.8vw, 18px); color:var(--muted); margin:0;}
 
-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 1em;
-    color: white;
-    background-color: #ff69b4;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+.actions{display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin:18px 0 8px}
 
-button:hover {
-    background-color: #ff1493;
+.btn{
+  --pad-x: 18px; --pad-y:11px; --radius:12px;
+  appearance:none; border:0; border-radius:var(--radius);
+  padding:var(--pad-y) var(--pad-x); font-weight:700; font-size:16px; cursor:pointer;
+  transition:transform .06s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
 }
+.btn:focus-visible{outline:2px solid var(--ring); outline-offset:3px}
+.btn:active{transform:translateY(1px)}
+.btn-primary{color:#fff; background:linear-gradient(180deg, var(--primary), var(--primary-strong)); box-shadow:0 8px 18px rgba(229,80,138,.35)}
+.btn-primary:hover{filter:saturate(1.05)}
+.btn-ghost{background:transparent; color:var(--primary-strong)}
+.btn-ghost:hover{background:rgba(229,80,138,.08)}
 
-.hidden {
-    display: none;
-}
+.reveal[hidden]{display:none}
+.reveal{margin-top:8px; padding:14px 16px; border: 1px dashed var(--ring); border-radius:14px; background:rgba(251,182,206,.12); animation:fadeSlide .45s ease both}
+.message-text{font-size:18px; line-height:1.9}
 
-#message {
-    margin-top: 20px;
-}
+@keyframes fadeSlide{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:translateY(0)}}
 
-#message img {
-    width: 100%;
-    max-width: 300px;
-    border-radius: 10px;
-    margin-top: 20px;
+.card__footer{display:flex; justify-content:center; margin-top:10px; color:var(--muted)}
+
+/* Confetti canvas */
+#confetti{position:fixed; inset:0; pointer-events:none}
+
+/* RTL tuning & small screens */
+@media (max-width:480px){
+  .brand{width:72px;height:72px}
+  .btn{font-size:15px}
 }
